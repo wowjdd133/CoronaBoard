@@ -1,20 +1,20 @@
-import { observable, action } from 'mobx';
-import CoronaRepository from './CoronaRepository';
+import { observable, action } from "mobx";
+import CoronaRepository from "./CoronaRepository";
 
-class CoronaStore{
+class CoronaStore {
   @observable.ref coronaWorld = {
     cases: 0,
     deaths: 0,
     recovered: 0,
     mortality: 0,
-    date: '로딩중'
+    date: "로딩중",
   };
   @observable.ref coronaKorea = {
     cases: 0,
     deaths: 0,
     recovered: 0,
     mortality: 0,
-    date: '로딩중'
+    date: "로딩중",
   };
 
   @observable.ref coronaKoreaCheck = [];
@@ -24,10 +24,10 @@ class CoronaStore{
   @action
   async getCoronaWorldConfirm() {
     try {
-      const {data} = await CoronaRepository.getCoronaWorldConfirm();
+      const { data } = await CoronaRepository.getCoronaWorldConfirm();
       data.mortality = this.getMortality(data.deaths, data.cases);
       this.coronaWorld = data;
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
   }
@@ -35,10 +35,10 @@ class CoronaStore{
   @action
   async getCoronaKoreaConfirm() {
     try {
-      const {data} = await CoronaRepository.getCoronaKoreaConfirm();
+      const { data } = await CoronaRepository.getCoronaKoreaConfirm();
       data.mortality = this.getMortality(data.deaths, data.cases);
       this.coronaKorea = data;
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
   }
@@ -46,15 +46,15 @@ class CoronaStore{
   @action
   async getCoronaKoreaConfirmCheck() {
     try {
-      const {data} = await CoronaRepository.getCoronaKoreaConfirmCheck();
+      const { data } = await CoronaRepository.getCoronaKoreaConfirmCheck();
       console.log(data);
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
   }
 
   @action
-  getLoading(){
+  getLoading() {
     this.isLoading = true;
   }
 
@@ -69,9 +69,11 @@ class CoronaStore{
     //   }
     // })
 
-    const result = Object.keys(obj).slice(0,3).map(function (key) {
-      return [key,Number(obj[key].replace(",",""))];
-    })
+    const result = Object.keys(obj)
+      .slice(0, 3)
+      .map(function (key) {
+        return [key, Number(obj[key].replace(",", ""))];
+      });
 
     return result;
   }
@@ -83,17 +85,17 @@ class CoronaStore{
     num1 = parseInt(num1);
     num2 = parseInt(num2);
 
-    return (num1/num2*100).toFixed(2);
+    console.log(num1, num2);
+
+    return ((num1 / num2) * 100).toFixed(2);
   }
 
-  removeComma(string){
-    return string.replace(",", "");
+  removeComma(string) {
+    return string.replace(/,/g, "");
   }
-
-  
 
   @action
-  loadingComplete(){
+  loadingComplete() {
     this.isLoading = false;
     console.log(this.isLoading);
   }
